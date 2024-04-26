@@ -10,16 +10,16 @@ const Sidebar = () =>{
     const sidebarItems = [
         {
             icon:<AiFillHome size={25} />,
-            text: "Home",
+            text: "Főoldal",
             link: "/",
         },
         {
             icon:<SearchLogo />,
-            text: "Search",
+            text: "Keresés",
         },
         {
             icon:<NotificationsLogo />,
-            text: "Notifications",
+            text: "Értesítések",
         },
         {
             icon:<CreatePostLogo />,
@@ -27,7 +27,7 @@ const Sidebar = () =>{
         },
         {
             icon:<Avatar size={"sm"} name={"Benacsek Dániel"} src='/Profilepic.png' />,
-            text: "Profile",
+            text: "Profil",
             link: "/Profile",
         },
     ];
@@ -86,7 +86,7 @@ const Sidebar = () =>{
                     >
                         <BiLogOut size={25} />
                         <Box display={{base:"none", md:"block"}}>
-                            Logout
+                            Kijelentkezés!
                         </Box>
                     </Link>
                 </Tooltip>

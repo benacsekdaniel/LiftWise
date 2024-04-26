@@ -6,7 +6,6 @@ const PageLayout= ({children}) =>{
     const {pathname} = useLocation()
     return(
         <Flex>
-            {/*left sidebar*/}
             {pathname!== '/auth' ?(
                 <Box w={{base: "70px", md: "240px"}}>
                     <Sidebar />
@@ -14,8 +13,7 @@ const PageLayout= ({children}) =>{
             ) :null }
             {/*Ha a Pathname az auth page-re mutat, akkor nem használjuk a sidebart*/}
 
-            {/*right content*/}
-            <Box flex={1} w={{base: "calc(100% - 70px)", md:"calc(100% - 240px)"}}>
+            <Box flex={1} w={{base: "calc(100% - 80px)", md:"calc(100% - 240px)"}}>
                 {children}
             </Box>
         </Flex>
