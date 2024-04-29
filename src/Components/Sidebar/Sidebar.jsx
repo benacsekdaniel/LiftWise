@@ -1,10 +1,11 @@
 import React from "react";
-import {Avatar, Box, Flex, Image, Link, Tooltip} from "@chakra-ui/react";
+import {Avatar, Box, Button, Flex, Image, Link, Tooltip} from "@chakra-ui/react";
 import {Link as RouterLink} from 'react-router-dom'
 import {CreatePostLogo, IconGym, NotificationsLogo, SearchLogo} from "../../assets/constants.jsx";
 import {IconGymnastics} from "../../assets/constants.jsx";
 import {AiFillHome} from "react-icons/ai";
 import {BiLogOut} from "react-icons/bi";
+import useLogout from "../../hooks/useLogout.js";
 
 const Sidebar = () =>{
     const sidebarItems = [
@@ -31,7 +32,7 @@ const Sidebar = () =>{
             link: "/Profile",
         },
     ];
-
+    const{handleLogout, isLoggingOut}=useLogout();
     return (
         <Box
             height={"100vh"}
@@ -50,11 +51,11 @@ const Sidebar = () =>{
                 </Link>
                 <Flex direction={"column"} gap={5} cursor={"pointer"}>
                     {sidebarItems.map((item, index) => (
+
+                        // Tooltip
                         <Tooltip hasArrow label={item.text} placement="right" ml={1} openDelay={500} display={{base:'block', md:'none'}}>
-                            <Link
-                                display={"flex"}
-                                to={item.link || null}
-                                as={RouterLink}
+                            <Flex
+                                onClick={handleLogout}
                                 alignItems={"center"}
                                 gap={4}
                                 _hover={{bg:"whiteAlpga.400"}}
@@ -67,7 +68,7 @@ const Sidebar = () =>{
                                 <Box display={{base:"none", md:"block"}}>
                                     {item.text}
                                 </Box>
-                            </Link>
+                            </Flex>
                         </Tooltip>
                     ))}
                 </Flex>
@@ -85,9 +86,9 @@ const Sidebar = () =>{
                         justifyContent={{base:"center", md:"flex-start"}}
                     >
                         <BiLogOut size={25} />
-                        <Box display={{base:"none", md:"block"}}>
+                        <Button display={{base:"none", md:"block"}} variant={"ghost"} _hover={{bg:"transparent"}} isLoading={isLoggingOut}>
                             Kijelentkezés!
-                        </Box>
+                        </Button>
                     </Link>
                 </Tooltip>
             </Flex>
