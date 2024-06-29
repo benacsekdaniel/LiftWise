@@ -11,7 +11,7 @@ const PostFooter = ({username}) => {
                     <Text fontSize='sm' fontWeight={700}>
                         {username} {" "}
                         <Text as='span' fontWeight={400}>
-                            Chris Bumstead's Back
+                            Az egészséges élet titka!
                         </Text>
                     </Text>
                 </Flex>

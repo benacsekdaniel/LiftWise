@@ -1,29 +1,56 @@
-import {Avatar, AvatarGroup, Button, Flex, Text, VStack} from "@chakra-ui/react";
+import { Avatar, Button, Flex, Link, Text } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { getAccountCreationDate } from "../../firebase/firebase";
+import useLogout from "../../hooks/useLogout";
+import useAuthStore from "../../store/authStore";
 
-const ProfileHeader = () => {
-    return <Flex gap={{base: 4, sm: 10}} py={10} direction={{base: "column", sm: "row"}}>
-        <AvatarGroup size={{base:"xl",md:"2xl"}} justifySelf={"center"} alignSelf={"flex-start"} mx={"auto"}>
-            <Avatar name='PFP' src="/Profilepic.png" alt="A profilképed!"/>
-        </AvatarGroup>
-        <VStack alignItems={"start"} gap={2} mx={"auto"} flex={1}>
-            <Flex gap={4} direction={{base:"column",sm:"row"}} justifyContent={{base:"center", sm:"flex-start"}} alignItems={"center"} w={"full"}>
-                <Text fontSize={{base:"sm",md:"lg"}}>
-                    LiftWiseSuperAdmin
-                </Text>
-                <Flex gap={4} alignItems={"center"} justifyContent={"center"}>
-                    <Button bg={"white"} color={"black"} _hover={{bg:"whiteAlpha.800"}} size={{base:"xs", md:"sm"}}>
-                        Profil Módosítása
-                    </Button>
+const SuggestedHeader = () => {
+    const authUser = useAuthStore((state) => state.user);
+    const [accountCreationDate, setAccountCreationDate] = useState(null);
+    const { handleLogout, isLoggingOut } = useLogout();
+
+    useEffect(() => {
+        if (authUser) {
+            getAccountCreationDate(authUser.uid).then((date) => {
+                setAccountCreationDate(date);
+            });
+        }
+    }, [authUser]);
+
+    if (!authUser) return null;
+
+    return (
+        <Flex justifyContent={"space-between"} alignItems={"center"} w={"full"}>
+            <Flex alignItems={"center"} gap={4}>
+                <Link to={`/${authUser.username}`}>
+                    <Avatar size={"xl"} src={authUser.profilePicURL} />
+                </Link>
+                <Flex flexDirection="column">
+                    <Link to={`/${authUser.username}`}>
+                        <Text fontSize={16} fontWeight={"bold"}>
+                            {authUser.username}
+                        </Text>
+                    </Link>
+                    <Text fontSize={12} color="gray.500">
+                        Tagság kezdete: {accountCreationDate || "Loading..."}
+                    </Text>
                 </Flex>
             </Flex>
-            <Flex alignItems={"center"} gap={{base:2, sm:4}}>
-                <Text>
-                    LiftWise tagság kezdete: 2024.04.04.
-                </Text>
-            </Flex>
+            <Button
+                size={"xs"}
+                background={"transparent"}
+                _hover={{ background: "transparent" }}
+                fontSize={14}
+                fontWeight={"medium"}
+                color={"blue.400"}
+                onClick={handleLogout}
+                isLoading={isLoggingOut}
+                cursor={"pointer"}
+            >
+                Kijelentkezés!
+            </Button>
+        </Flex>
+    );
+};
 
-        </VStack>
-    </Flex>
-}
-
-export default ProfileHeader
+export default SuggestedHeader;

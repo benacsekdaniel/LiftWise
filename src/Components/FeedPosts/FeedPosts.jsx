@@ -4,11 +4,13 @@ import FeedPost from "./FeedPost.jsx";
 const FeedPosts = () => {
     return(
         <Container maxW={"container.sm"} py={10} px={2}>
-            <FeedPost username="Ronnie Coleman" img='/RONNIE.jpg' avatar='LWBIG.png'/>
-            <FeedPost username="Chris Bumstead" img='CBUM.jpg' avatar='LWBIG.png'/>
-            <FeedPost username="Jay Cutler" img='JAY.jpg' avatar='LWBIG.png'/>
-            <FeedPost username="Jack Black" img='JACK.jpg' avatar='LWBIG.png'/>
-            <FeedPost username="Gorilla" img='gorilla.jpg' avatar='LWBIG.png'/>
+            <FeedPost username="LiftWiseAdmin" img='healthy1.jpg' avatar='LWBIG.png'/>
+            <FeedPost username="LiftWiseAdmin" img='healthy2.jpg' avatar='LWBIG.png'/>
+            <FeedPost username="LiftWiseAdmin" img='healthy3.jpg' avatar='LWBIG.png'/>
+            <FeedPost username="LiftWiseAdmin" img='exercise.jpg' avatar='LWBIG.png'/>
+            <FeedPost username="LiftWiseAdmin" img='exercising1.jpg' avatar='LWBIG.png'/>
+            <FeedPost username="LiftWiseAdmin" img='exercising2.jpg' avatar='LWBIG.png'/>
+            <FeedPost username="LiftWiseAdmin" img='exercising3.jpg' avatar='LWBIG.png'/>
         </Container>
     )
 }

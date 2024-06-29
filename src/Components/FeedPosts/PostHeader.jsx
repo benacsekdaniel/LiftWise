@@ -14,7 +14,7 @@ const PostHeader = ({username, avatar}) => {
                 </Flex>
             </Flex>
             <Box cursor={"pointer"}>
-                <Text fontSize={12} color={"green.500"} fontWeight={"bold"} _hover={{color: "white",}} transition={"0.2s ease-in-out"}>Cheer!</Text>
+                <Text fontSize={12} color={"green.500"} fontWeight={"bold"} _hover={{color: "white",}} transition={"0.2s ease-in-out"}>Cikk mentése!</Text>
             </Box>
         </Flex>
     )

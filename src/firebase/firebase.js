@@ -1,8 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore"
+import {collection, getFirestore} from "firebase/firestore"
 import { getStorage } from "firebase/storage"
+
 // TODO: Add SDKs for Firebase products that you want to use
 
 const firebaseConfig = {
@@ -15,6 +16,8 @@ const firebaseConfig = {
     measurementId: "G-VJX32SVM4R"
 };
 
+
+
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
@@ -22,3 +25,25 @@ const firestore = getFirestore(app);
 const storage = getStorage(app)
 
 export {app, auth, firestore, storage};
+
+// ----------- firebase fetch - létrehozás dátuma
+export const getAccountCreationDate = async (userId) => {
+    try {
+        // const userDocRef = firestore.collection('users').doc(userId);
+        const userDocRef = collection(firestore, "users", userId, "links");
+        const userDoc = await userDocRef.get();
+
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            const accountCreationDate = userData.createdAt;
+
+            return accountCreationDate;
+        } else {
+            throw new Error('Nem található ilyen felhasználó!');
+        }
+    } catch (error) {
+        console.error('Hiba a dátum megjelenítésében:', error.message);
+        throw error;
+    }
+};
+// -----------
