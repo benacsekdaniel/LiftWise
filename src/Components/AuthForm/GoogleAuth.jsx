@@ -14,7 +14,7 @@ const GoogleAuth = ({prefix}) => {
         try {
             const newUser = await signInWithGoogle(); //returnoli ha successful
             if (!newUser && error) {
-                showToast("Hiba!", error.message, "error");
+                showToast("Hiba nem is letezik!", error.message, "error");
                 return;
             }
 
@@ -44,7 +44,7 @@ const GoogleAuth = ({prefix}) => {
 
 
         } catch (error) {
-            showToast("Hiba!", error.message, "error");
+            showToast("Hiba catch error!", error.message, "error");
         }
     };
 

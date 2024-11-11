@@ -1,29 +1,66 @@
-import {Navigate, Route, Routes} from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./Pages/HomePage/HomePage";
 import AuthPage from "./Pages/AuthPage/AuthPage";
 import PageLayout from "./Layouts/PageLayout/PageLayout.jsx";
 import ProfilePage from "./Pages/ProfilePage/ProfilePage.jsx";
-import { useAuthState } from "react-firebase-hooks/auth";
-import {auth} from "./firebase/firebase.js";
 import CreatePost from "./Pages/CreatePost/CreatePost.jsx";
-
-
+import PrivateRoute from "./Components/AuthForm/PrivateRoute.jsx";
+import {useAuthState} from "react-firebase-hooks/auth";
+import authPage from "./Pages/AuthPage/AuthPage";
+import ArticleSearchPage from "./Pages/ArticleSearchPage/ArticleSearchPage.jsx";
+import SavedArticles from './Pages/SavedArticles/SavedArticles';
 
 function App() {
-    const [authUser] = useAuthState(auth);
 
     return (
         <PageLayout>
             <Routes>
-                <Route path='/auth' element={!authUser ? <AuthPage /> : <Navigate to={'/'} /> } />
-                <Route path='/create-post' element={<CreatePost />} />
-                <Route path='/' element={authUser != null ? <HomePage /> : <Navigate to={'/auth'} />} />
-                <Route path='/:username' element={<ProfilePage />} />
-            </Routes>
+                {/* Public route */}
+                <Route path='/auth' element={ <AuthPage />} />
 
+                <Route
+                    path="/"
+                    element={
+                        <PrivateRoute>
+                            <HomePage />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/create-post"
+                    element={
+                        <PrivateRoute>
+                            <CreatePost />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/search-articles"
+                    element={
+                        <PrivateRoute>
+                            <ArticleSearchPage />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/:username"
+                    element={
+                        <PrivateRoute>
+                            <ProfilePage />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/saved-articles"
+                    element={
+                        <PrivateRoute>
+                            <SavedArticles />
+                        </PrivateRoute>
+                    }
+                />
+            </Routes>
         </PageLayout>
     );
 }
 
 export default App;
-

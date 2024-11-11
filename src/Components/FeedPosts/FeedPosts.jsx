@@ -1,18 +1,43 @@
-import {Container} from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 import FeedPost from "./FeedPost.jsx";
+import { useState, useEffect } from 'react';
+import { getAllArticles } from '../../services/articleService';
 
 const FeedPosts = () => {
-    return(
+    const [articles, setArticles] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchArticles = async () => {
+            try {
+                const fetchedArticles = await getAllArticles();
+                setArticles(fetchedArticles);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching articles:", error);
+                setLoading(false);
+            }
+        };
+
+        fetchArticles();
+    }, []);
+
+    if (loading) return <Container maxW={"container.sm"} py={10} px={2}>Loading...</Container>;
+
+    return (
         <Container maxW={"container.sm"} py={10} px={2}>
-            <FeedPost username="LiftWiseAdmin" img='healthy1.jpg' avatar='LWBIG.png'/>
-            <FeedPost username="LiftWiseAdmin" img='healthy2.jpg' avatar='LWBIG.png'/>
-            <FeedPost username="LiftWiseAdmin" img='healthy3.jpg' avatar='LWBIG.png'/>
-            <FeedPost username="LiftWiseAdmin" img='exercise.jpg' avatar='LWBIG.png'/>
-            <FeedPost username="LiftWiseAdmin" img='exercising1.jpg' avatar='LWBIG.png'/>
-            <FeedPost username="LiftWiseAdmin" img='exercising2.jpg' avatar='LWBIG.png'/>
-            <FeedPost username="LiftWiseAdmin" img='exercising3.jpg' avatar='LWBIG.png'/>
+            {articles.map((article) => (
+                <FeedPost 
+                    key={article.id}
+                    articleId={article.id}
+                    username={article.username}
+                    img={article.img_path}
+                    avatar='LWBIG.png'
+                    content={article.content}
+                />
+            ))}
         </Container>
-    )
+    );
 }
 
-export default FeedPosts
+export default FeedPosts;

@@ -16,16 +16,16 @@ const Sidebar = () => {
         {
             icon: <SearchLogo />,
             text: "Cikkek keresése",
-            link: "/cikkek-keresese",
+            link: "/search-articles",
         },
         {
             icon: <NotificationsLogo />,
             text: "Mentett cikkek",
-            link: "/mentett-cikkek",
+            link: "/saved-articles",
         },
         {
             icon: <CreatePostLogo />,
-            text: "Create",
+            text: "Cikk Létrehozása",
             link: "/create-post",
         },
         {

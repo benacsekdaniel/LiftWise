@@ -1,78 +1,7 @@
-// import { useState } from "react";
-// import { Box, Container, Flex, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Input, Button } from "@chakra-ui/react";
-// import { AiOutlineMessage } from "react-icons/ai";
-// import FeedPosts from "../../Components/FeedPosts/FeedPosts.jsx";
-// import Suggestions from "../../Components/Suggestions/Suggestions.jsx";
-//
-// const HomePage = () => {
-//     const [isChatOpen, setIsChatOpen] = useState(false);
-//
-//     const openChat = () => {
-//         setIsChatOpen(true);
-//     };
-//
-//     const closeChat = () => {
-//         setIsChatOpen(false);
-//     };
-//
-//     const [typing, setTyping] = useState(false);
-//
-//
-//     return (
-//         <Container maxW={"container.lg"}>
-//             <Flex gap={20}>
-//                 <Box flex={2} py={10}>
-//                     <FeedPosts />
-//                 </Box>
-//                 <Box flex={3} mr={20} display={{ base: "none", lg: "block" }} maxW={"300px"}>
-//                     <Suggestions />
-//                 </Box>
-//             </Flex>
-//             <Box
-//                 position="fixed"
-//                 bottom="20px"
-//                 right="20px"
-//                 zIndex="999"
-//             >
-//                 <IconButton
-//                     bg="blue.500"
-//                     color="white"
-//                     borderRadius="full"
-//                     p={3}
-//                     aria-label="Open Chat"
-//                     icon={<AiOutlineMessage size={24} />}
-//                     onClick={openChat}
-//                 />
-//             </Box>
-//             <Modal isOpen={isChatOpen} onClose={closeChat} size="md" blockScrollOnMount={false}>
-//                 <ModalOverlay />
-//                 <ModalContent borderRadius="md">
-//                     <ModalHeader>Beszélgess Želimirrel! (AI)</ModalHeader>
-//                     <ModalCloseButton />
-//                     <ModalBody>
-//                         <Box height="300px" overflowY="scroll">
-//                             <Box bg="blue.100" p={2} mb={2} borderRadius="md" color={"black"}>
-//                                 <strong>Želimir:</strong> Üdv az oldalon, Želimir vagyok, miben segíthetek?
-//                             </Box>
-//                         </Box>
-//                         <Flex mt={4}>
-//                             <Input placeholder="Írj üzenetet..." flex="1" mr={2} />
-//                             <Button colorScheme="blue">Küldés</Button>
-//                         </Flex>
-//                     </ModalBody>
-//                 </ModalContent>
-//             </Modal>
-//         </Container>
-//     );
-// };
-//
-// export default HomePage;
-//
-//
-import { useState } from "react";
+import React, { useState } from "react";
 import { Box, Container, Flex, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Input, Button } from "@chakra-ui/react";
 import { AiOutlineMessage } from "react-icons/ai";
-import axios from "axios"; // Import Axios for making HTTP requests
+import axios from "axios";
 import FeedPosts from "../../Components/FeedPosts/FeedPosts.jsx";
 import Suggestions from "../../Components/Suggestions/Suggestions.jsx";
 
@@ -97,9 +26,11 @@ const HomePage = () => {
         if (!message) return;
 
         try {
-
-            // Prepare the messages array for the ChatGPT API
             const messages = [
+                { 
+                    role: "system", 
+                    content: "Te egy edzéssel és sporttal foglalkozó weboldal AI-asszisztense vagy. Csak az edzéssel, sporttal, táplálkozással és általános egészséggel kapcsolatos kérdésekre válaszolj. Ha a felhasználók ettől eltérő kérdéseket tesznek fel, udvariasan tájékoztasd őket arról, hogy csak a fitnesz és sport témákkal kapcsolatos kérdésekben tudsz segíteni. Tartsd a válaszokat tömören és gyakorlatiasan."
+                },
                 ...chatHistory.map(chat => ({
                     role: chat.isUser ? "user" : "assistant",
                     content: chat.message
@@ -107,24 +38,23 @@ const HomePage = () => {
                 { role: "user", content: message }
             ];
 
-            // Make a POST request to the ChatGPT API
             const response = await axios.post(
                 "https://api.openai.com/v1/chat/completions",
                 {
-                    model: "gpt-3.5-turbo-0125", // Általam használt modell
+                    model: "gpt-3.5-turbo-0125",
                     messages: messages,
-                    max_tokens: 100
+                    max_tokens: 50,
+                    temperature: 0.7
                 },
                 {
                     headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer sk-proj-zp9hNBGMB2l0MIwgtVkFT3BlbkFJYXt8I62zekUlmLx80JaL" // Replace with your API key
+                        "Cont":"",
+                        "Auth":""
                     }
                 }
             );
 
             const responseData = response.data.choices[0].message.content;
-            console.log(response);
             setChatHistory(prevHistory => [...prevHistory, { message, isUser: true }, { message: responseData, isUser: false }]);
             setMessage("");
         } catch (error) {
@@ -142,12 +72,7 @@ const HomePage = () => {
                     <Suggestions />
                 </Box>
             </Flex>
-            <Box
-                position="fixed"
-                bottom="20px"
-                right="20px"
-                zIndex="999"
-            >
+            <Box position="fixed" bottom="20px" right="20px" zIndex="999">
                 <IconButton
                     bg="blue.500"
                     color="white"
@@ -158,30 +83,78 @@ const HomePage = () => {
                     onClick={openChat}
                 />
             </Box>
-            <Modal isOpen={isChatOpen} onClose={closeChat} size="md" blockScrollOnMount={false}>
+            <Modal isOpen={isChatOpen} onClose={closeChat} size="md">
                 <ModalOverlay />
-                <ModalContent borderRadius="md">
-                    <ModalHeader>Beszélgess Želimirrel! (AI)</ModalHeader>
+                <ModalContent maxW="600px" h="600px">
+                    <ModalHeader>Beszélgess Robival! (AI)</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>
-                        <Box height="300px" overflowY="scroll">
+                    <ModalBody 
+                        display="flex" 
+                        flexDirection="column" 
+                        h="calc(100% - 60px)"
+                        pb={4}
+                    >
+                        <Box 
+                            flex="1"
+                            overflowY="auto"
+                            mb={4}
+                            p={2}
+                            css={{
+                                '&::-webkit-scrollbar': {
+                                    width: '8px',
+                                },
+                                '&::-webkit-scrollbar-track': {
+                                    background: '#f1f1f1',
+                                },
+                                '&::-webkit-scrollbar-thumb': {
+                                    background: '#888',
+                                    borderRadius: '4px',
+                                },
+                            }}
+                        >
                             {chatHistory.map((chat, index) => (
-                                <Box key={index} bg={chat.isUser ? "blue.100" : "gray.100"} p={2} mb={2} borderRadius="md" color={chat.isUser ? "black" : "black"}>
-                                    {chat.message}
-                                </Box>
+                                <Flex 
+                                    key={index} 
+                                    justifyContent={chat.isUser ? "flex-end" : "flex-start"}
+                                    mb={4}
+                                    width="100%"
+                                >
+                                    <Box
+                                        bg={chat.isUser ? "blue.100" : "gray.100"}
+                                        p={6}
+                                        borderRadius="lg"
+                                        color="black"
+                                        whiteSpace="pre-wrap"
+                                        wordBreak="break-word"
+                                        boxShadow="sm"
+                                        minW="300px"
+                                        maxW="90%"
+                                        overflow="visible"
+                                        sx={{
+                                            wordWrap: "break-word",
+                                            overflowWrap: "break-word",
+                                            height: "fit-content",
+                                            minHeight: "min-content"
+                                        }}
+                                    >
+                                        {chat.message}
+                                    </Box>
+                                </Flex>
                             ))}
                         </Box>
-                        <Flex mt={4}>
-                            <Input
-                                placeholder="Írj üzenetet..."
-                                flex="1"
-                                mr={2}
-                                value={message}
-                                onChange={handleChange}
-                                onKeyDown={(e) => { if (e.key === 'Enter') sendMessage() }}
-                            />
-                            <Button colorScheme="blue" onClick={sendMessage}>Küldés</Button>
-                        </Flex>
+                        <Box>
+                            <Flex>
+                                <Input
+                                    placeholder="Írj üzenetet..."
+                                    flex="1"
+                                    mr={2}
+                                    value={message}
+                                    onChange={handleChange}
+                                    onKeyDown={(e) => { if (e.key === 'Enter') sendMessage() }}
+                                />
+                                <Button colorScheme="blue" onClick={sendMessage}>Küldés</Button>
+                            </Flex>
+                        </Box>
                     </ModalBody>
                 </ModalContent>
             </Modal>
@@ -190,5 +163,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-
