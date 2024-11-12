@@ -82,8 +82,12 @@ const ProfileBody = () => {
                 Személyes adatok:<br/>
                 <Text fontSize="sm" as="span" fontWeight="bold">Magasság:</Text> {userInfo.height} cm<br/>
                 <Text fontSize="sm" as="span" fontWeight="bold">Testsúly:</Text> {userInfo.weight} kg<br/>
-                <Text fontSize="sm" as="span" fontWeight="bold">Születési év:</Text> {new Date(userInfo.birthday.seconds * 1000).toLocaleDateString()}<br/>
-                <Text fontSize="sm" as="span" fontWeight="bold">Kor:</Text> {new Date().getFullYear() - new Date(userInfo.birthday.seconds * 1000).getFullYear()} év<br/>
+                <Text fontSize="sm" as="span" fontWeight="bold">Születési év:</Text> {userInfo?.birthday?.seconds ? 
+                    new Date(userInfo.birthday.seconds * 1000).toLocaleDateString() : 
+                    'Nincs megadva'}<br/>
+                <Text fontSize="sm" as="span" fontWeight="bold">Kor:</Text> {userInfo?.birthday?.seconds ? 
+                    new Date().getFullYear() - new Date(userInfo.birthday.seconds * 1000).getFullYear() : 
+                    'Nincs megadva'} év<br/>
                 <Text fontSize="sm" as="span" fontWeight="bold">Város:</Text> {userInfo.city}<br/>
                 <Text fontSize="sm" as="span" fontWeight="bold">Teljes név:</Text> {userInfo.fullName}<br/>
             </Box>

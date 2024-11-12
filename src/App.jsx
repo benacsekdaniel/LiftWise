@@ -9,6 +9,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import authPage from "./Pages/AuthPage/AuthPage";
 import ArticleSearchPage from "./Pages/ArticleSearchPage/ArticleSearchPage.jsx";
 import SavedArticles from './Pages/SavedArticles/SavedArticles';
+import ArticleEditing from "./Pages/ArticleEditing/ArticleEditing";
 
 function App() {
 
@@ -55,6 +56,14 @@ function App() {
                     element={
                         <PrivateRoute>
                             <SavedArticles />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/edit-articles"
+                    element={
+                        <PrivateRoute>
+                            <ArticleEditing />
                         </PrivateRoute>
                     }
                 />

@@ -7,9 +7,6 @@ const PostHeader = ({ username, avatar, articleId }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        console.log(articleId);
-        console.log(username);
-        console.log(avatar);
         checkIfSaved();
     }, []);
 
@@ -27,7 +24,9 @@ const PostHeader = ({ username, avatar, articleId }) => {
         }
     };
 
-    const handleSaveClick = async () => {
+    const handleSaveClick = async (e) => {
+        e.stopPropagation();
+        
         try {
             const userInfo = JSON.parse(localStorage.getItem('user-info'));
             if (!userInfo) {

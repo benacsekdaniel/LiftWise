@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Box, Grid, Heading, Text, Image, VStack, Container } from '@chakra-ui/react';
 import { getUserSavedArticles } from '../../services/savedArticleService';
 import { getArticleById } from '../../services/articleService';
+import ArticleModal from '../../Components/Article/ArticleModal';
 
 const SavedArticles = () => {
     const [savedArticles, setSavedArticles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [selectedArticle, setSelectedArticle] = useState(null);
 
     useEffect(() => {
         fetchSavedArticles();
@@ -57,11 +59,11 @@ const SavedArticles = () => {
         }
     };
 
-    if (loading) return <Container maxW="container.lg"><Box p={5}>Loading...</Box></Container>;
-    if (error) return <Container maxW="container.lg"><Box p={5}>{error}</Box></Container>;
+    if (loading) return <Container maxW="95vw"><Box p={5}>Loading...</Box></Container>;
+    if (error) return <Container maxW="95vw"><Box p={5}>{error}</Box></Container>;
 
     return (
-        <Container maxW="container.lg">
+        <Container maxW="95vw">
             <Box p={5}>
                 <Heading mb={6}>Mentett cikkek</Heading>
                 {savedArticles.length === 0 ? (
@@ -82,6 +84,8 @@ const SavedArticles = () => {
                                     transform: 'translateY(-5px)',
                                     boxShadow: 'lg'
                                 }}
+                                cursor="pointer"
+                                onClick={() => setSelectedArticle(article)}
                             >
                                 {article.img_path && (
                                     <Image
@@ -109,6 +113,12 @@ const SavedArticles = () => {
                     </Grid>
                 )}
             </Box>
+
+            <ArticleModal 
+                isOpen={!!selectedArticle} 
+                onClose={() => setSelectedArticle(null)} 
+                article={selectedArticle}
+            />
         </Container>
     );
 };

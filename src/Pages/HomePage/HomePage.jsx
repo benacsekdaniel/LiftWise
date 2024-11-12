@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Container, Flex, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Input, Button } from "@chakra-ui/react";
+import { Box, Container, Flex, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Input, Button, Heading, Center, useColorMode } from "@chakra-ui/react";
 import { AiOutlineMessage } from "react-icons/ai";
 import axios from "axios";
 import FeedPosts from "../../Components/FeedPosts/FeedPosts.jsx";
@@ -9,6 +9,7 @@ const HomePage = () => {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [chatHistory, setChatHistory] = useState([]);
     const [message, setMessage] = useState("");
+    const { colorMode } = useColorMode();
 
     const openChat = () => {
         setIsChatOpen(true);
@@ -48,8 +49,8 @@ const HomePage = () => {
                 },
                 {
                     headers: {
-                        "Cont":"",
-                        "Auth":""
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer API-KEY"
                     }
                 }
             );
@@ -62,14 +63,31 @@ const HomePage = () => {
         }
     };
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault(); // Prevent default to avoid new line in textarea
+            sendMessage();
+        }
+    };
+
     return (
-        <Container maxW={"container.lg"}>
-            <Flex gap={20}>
-                <Box flex={2} py={10}>
-                    <FeedPosts />
-                </Box>
-                <Box flex={3} mr={20} display={{ base: "none", lg: "block" }} maxW={"300px"}>
+        <Container maxW="95vw" p={0}>
+            <Flex direction="column">
+                <Box w="full">
                     <Suggestions />
+                </Box>
+                <Center py={8}>
+                    <Heading
+                        fontSize="4xl"
+                        fontWeight="bold"
+                        color={colorMode === "dark" ? "white" : "black"}
+                        letterSpacing="wide"
+                    >
+                        LiftWise
+                    </Heading>
+                </Center>
+                <Box w="full">
+                    <FeedPosts />
                 </Box>
             </Flex>
             <Box position="fixed" bottom="20px" right="20px" zIndex="999">
@@ -150,7 +168,7 @@ const HomePage = () => {
                                     mr={2}
                                     value={message}
                                     onChange={handleChange}
-                                    onKeyDown={(e) => { if (e.key === 'Enter') sendMessage() }}
+                                    onKeyDown={handleKeyDown}
                                 />
                                 <Button colorScheme="blue" onClick={sendMessage}>Küldés</Button>
                             </Flex>

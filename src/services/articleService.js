@@ -1,5 +1,5 @@
 // firebaseArticlesService.js
-import { collection, addDoc, getDoc, getDocs, updateDoc, deleteDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy, where } from "firebase/firestore";
 import { firestore } from "../firebase/firebase"; // adjust the import path based on your setup
 
 const articlesCollectionRef = collection(firestore, "articles");
@@ -45,7 +45,11 @@ export const getArticleById = async (id) => {
 // Get all articles
 export const getAllArticles = async () => {
     try {
-        const querySnapshot = await getDocs(articlesCollectionRef);
+        const q = query(
+            articlesCollectionRef,
+            orderBy("createdAt", "desc")
+        );
+        const querySnapshot = await getDocs(q);
         const articles = [];
         querySnapshot.forEach((doc) => {
             articles.push({ id: doc.id, ...doc.data() });
@@ -77,6 +81,29 @@ export const deleteArticle = async (id) => {
         return id;
     } catch (error) {
         console.error("Error deleting article:", error);
+        throw error;
+    }
+};
+
+export const getArticlesByAuthor = async (userId) => {
+    try {
+        // Simplified query that only filters by author
+        const q = query(
+            articlesCollectionRef,
+            where("author", "==", userId)
+        );
+        const querySnapshot = await getDocs(q);
+        const articles = [];
+        querySnapshot.forEach((doc) => {
+            articles.push({ id: doc.id, ...doc.data() });
+        });
+        
+        // Sort the articles by createdAt locally
+        return articles.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+    } catch (error) {
+        console.error("Error getting author's articles:", error);
         throw error;
     }
 };
